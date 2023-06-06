@@ -5,9 +5,11 @@ const app = express()
 const port = 3000
 
 app.use(cors())
+app.use(express.json())
 
 app.post("/query", async (req, res) => {
   const { data } = await axios.post("https://graphigo.prd.space.id/query", req.body)
+  console.log(data)
   res.setHeader("Access-Control-Allow-Origin", "*")
   res.setHeader("Access-Control-Allow-Credentials", "true")
   res.setHeader("Access-Control-Max-Age", "1800")
