@@ -1,73 +1,13 @@
-var express = require("express"),
-  request = require("request"),
-  bodyParser = require("body-parser"),
-  app = express()
+const express = require("express")
+const axios = require("axios")
+const app = express()
+const port = 3000
 
-var myLimit = typeof process.argv[2] != "undefined" ? process.argv[2] : "5mb"
-console.log("Using limit: ", myLimit)
-
-app.use(bodyParser.json({ limit: myLimit }))
-
-// app.all("*", function (req, res, next) {
-//   // Set CORS headers: allow all origins, methods, and headers: you may want to lock this down in a production environment
-//   res.header("Access-Control-Allow-Origin", "*")
-//   res.header("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE")
-//   res.header("Access-Control-Allow-Headers", req.header("access-control-request-headers"))
-
-//   if (req.method === "OPTIONS") {
-//     // CORS Preflight
-//     res.send()
-//   } else {
-//     var targetURL = req.header("Target-URL")
-//     if (!targetURL) {
-//       res.send(500, { error: "There is no Target-Endpoint header in the request" })
-//       return
-//     }
-//     request(
-//       {
-//         url: targetURL + req.url,
-//         method: req.method,
-//         json: req.body,
-//         headers: { Authorization: req.header("Authorization") },
-//       },
-//       function (error, response, body) {
-//         if (error) {
-//           console.error("error: " + response.statusCode)
-//         }
-//         //                console.log(body);
-//       }
-//     ).pipe(res)
-//   }
-// })
-
-app.post("/query", function (req, res, next) {
-  // Set CORS headers: allow all origins, methods, and headers: you may want to lock this down in a production environment
-  res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE")
-  res.header("Access-Control-Allow-Headers", req.header("access-control-request-headers"))
-
-  if (req.method === "OPTIONS") {
-    // CORS Preflight
-    res.send()
-  } else {
-    request(
-      {
-        url: "https://graphigo.prd.space.id/query",
-        method: "POST",
-        json: req.body,
-      },
-      function (error, response, body) {
-        if (error) {
-          console.error("error: " + response.statusCode)
-        }
-        //                console.log(body);
-      }
-    ).pipe(res)
-  }
+app.post("/query", async (req, res) => {
+  const { data } = await axios.post("https://graphigo.prd.space.id/query", req.body)
+  res.send(data)
 })
 
-app.set("port", process.env.PORT || 3000)
-
-app.listen(app.get("port"), function () {
-  console.log("Proxy server listening on port " + app.get("port"))
+app.listen(process.env.PORT || port, () => {
+  console.log(`Example app listening on port ${port}`)
 })
