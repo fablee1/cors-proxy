@@ -6,6 +6,7 @@
   "dependencies": {
     "axios": "^1.4.0",
     "body-parser": "~1.5.2",
+    "cors": "^2.8.5",
     "cors-anywhere": "^0.4.4",
     "express": "~4.4.3",
     "request": "~2.36.0"
